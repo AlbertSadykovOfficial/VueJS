@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form</title>
+	<script src="https://unpkg.com/vue"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<div id="app">
+				<header>
+						<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+							 <div class="container-fluid">
+							    <a class="navbar-brand" href="#">
+							    		
+							    		<!-- Имя приложения через v-text -->
+							    		<h1 v-text="sitename"></h1>
+							    
+							    </a>
+
+								 	<div class="navbar-collapse collapse" >
+
+								 			<!-- Кнопка корзины  inline -->
+											<button type="button" 
+															class="btn btn-primary"
+															v-on:click="showCheckout"
+											>
+													<span class="glyphicon glyphicon-shopping-cart">
+														{{ cartItemCount }}
+													</span>
+												Корзина
+											</button>
+								 	
+								 	</div>
+							 </div>
+						</nav>
+				</header>
+				<main class="container">
+					<div v-if="showProduct">
+		
+							<div class="row product">
+									
+									<div class="col">
+										<figure>
+											<img v-bind:src="product.image">
+										</figure>
+									</div>
+									<div class="col col-expand">
+										<h1 v-text="product.title"></h1>
+										<p v-html="product.description"></p> <!-- Аккуратно XSS-->
+										<p v-text="product.price" class="price"></p>
+										<p class="price">
+											{{ product.price | formatPrice }}
+										</p>
+
+										<!-- 
+													v-show vs v-if
+
+														v-show - устанавливает значение display:hidden при true 
+														v-if - удаляет объект, если значение false
+														v-else - выводит объект, если значение v-if = false
+										-->
+										<button class="default"
+														v-on:click="addToCart"
+														v-show="canAddToCart">
+														Add To Cart (v-show)
+										</button>
+										
+										<button class="btn btn-primary default"
+														v-on:click="addToCart"
+														v-if="canAddToCart">
+														Add To Cart (v-if-else)
+										</button>
+										<button class="btn btn-secondary disabled"
+														v-else>
+														Can't Add To Cart (v-if-else)
+										</button>
+									</div>
+								
+							</div>
+
+					</div>
+					<div v-else>
+						
+							<!-- Применение модификаторов 
+										
+										trim - обрезает пробелы в начале и конце
+										lazy - изменяет модель при событии onchange (по умолчанию при onkeyup)
+							-->
+							<div class="col-md-6">	
+									<strong>Имя:</strong>
+									<input v-model.trim.lazy="order.firstName" class="form-control">
+							</div>
+							<div class="col-md-6">	
+									<strong>Фамилия:</strong>
+									<input v-model.trim="order.lastName" class="form-control">
+							</div>
+							<div class="form-group">
+									<div class="col-md-12"><strong>Адрес:</strong></div>
+									<div class="col-md-12">
+										<input v-model="order.address"
+													 class="form-control">
+									</div>
+							</div>
+							<div class="form-group">
+									<div class="col-md-12"><strong>Город:</strong></div>
+									<div class="col-md-12">
+										<input v-model="order.city"
+													 class="form-control">
+									</div>
+							</div>
+
+							<!-- Циклы: Декриктива (v-for) -->
+							<div class="form-group">
+								
+									<div class="col-md-2">
+											<strong>Штат:</strong>
+											<select v-model="order.state"
+														 class="form-control">
+														 	<option disabled value="">Штат</option>
+														 	<option v-for="(state, key) in states"
+														 					v-bind:value="state">
+														 					{{ key }}
+														 	</option>
+														 </select>
+									</div>
+							</div>
+
+							<!-- Применение модификатор после модели 
+										
+										После применения можификтора number в html будут выводиться числа,
+										тогда как по умолчанию выводятся строки:
+											{{ typeof(order.zip) }}
+							-->
+							<div class="form-group">
+									<div class="col-md-6 col-md-offset-4">
+											<strong>Потчовый индекс:</strong>
+											<input v-model.number="order.zip"
+														 class="form-control">
+									</div>
+							</div>
+
+							<!-- Флажки и переключатели -->
+							<!-- v-bind:value позволяет изменять отображение по значению  -->
+							<div class="form-group">
+									<div class="col-md-6 boxes">
+											<input type="checkbox"
+															id="gift" value="true"
+															v-bind:true-value="order.sendGift"
+															v-bind:false-value="order.dontSendGift"
+															v-model="order.gift">
+											<label for="gift">Упаковать как подарок?</label>
+									</div>
+							</div>
+							<div class="form-group">
+									<div class="col-md-6 boxes">
+											<input type="radio"
+															id="home" 
+															value="Home"
+															v-bind:value="order.home"
+															v-model="order.method">
+											<label for="Home">Домашний</label>
+											<input type="radio"
+															id="business" 
+															value="Busines"
+															v-bind:value="order.business"
+															v-model="order.method">
+											<label for="Bussines">Рабочий</label>
+									</div>
+							</div>				
+
+							<div class="col-md-6 verify">	
+									<pre>
+Имя: {{ order.firstName }}
+Фамилия: {{ order.lastName }}
+Адрес: {{ order.address }}
+Город: {{ order.city }}
+Почтоый индекс: {{ order.zip }} ( {{ typeof(order.zip) }} ) 
+Штат: {{ order.state }}
+Упаковка: {{ order.gift }}
+Домашний / Рабчий: {{ order.method }}
+									</pre>
+							</div>
+							
+							<div class="form-group">
+									<div class="col-md-6">
+											<button type="sumbit"
+															class="btn btn-primary submit"
+															v-on:click="submitForm">
+															Place Order
+											</button>
+									</div>
+							</div>
+					</div>
+				</main>
+		</div>
+
+		<script src="app.js"></script>
+
+</body>
+</html>
