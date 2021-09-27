@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+		<div id="app">
+				<my-component></my-component>
+				<my-component2></my-component2>
+		</div>
+		<script>
+				Vue.component('my-component', {
+						template: '<div>Hello From Component 1</div>'
+				});
+
+				const Component = {
+					template: '<div>Hello From Component 2</div>'
+				}
+				new Vue ({
+						el: "#app",
+						// Для HTML:
+						// my-component === myComponent === MyComponent
+						components: {'myComponent2': Component}
+				});
+		</script>
+</body>
+</html>
