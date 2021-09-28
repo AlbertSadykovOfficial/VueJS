@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+		<div id="app">
+				<!-- (:) === (v-bind) -->
+				<my-component :text="message"></my-component>
+		</div>
+		<script>
+				const Component = {
+						template: '<div>Hello {{ text }}! {{ tester1 }}</div>',
+						props: ['text'],
+						data() {
+								return {
+										tester1: 'Testing test 1'
+								}
+						}
+				};
+
+				new Vue ({
+						el: "#app",
+						components: {'myComponent': Component},
+						data() {
+								return {
+										message: 'From PARENT component'
+								}
+						}
+				});
+		</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+		<div id="app">
+				<!-- Вложенный шаблон -->
+				<my-component1 :my-info="message" inline-template>
+						<div>
+								<p>
+										inline-template - {{ myInfo }}
+								</p>
+						</div>
+				</my-component1>
+			<my-component2></my-component2>
+		</div>
+
+		<script type="text/x-template" id="my-component2">
+				<p>
+						Hello from x-template, Hello World
+				</p>
+		</script>
+
+		<script>
+				const Component1 = {
+						props: ['my-info']
+				}
+				const Component2 = {
+						template: "#my-component2"
+				}
+				new Vue ({
+						el: "#app",
+						components: {'my-component1': Component1,
+												 'my-component2': Component2},
+						data() {
+								return {
+										message: "Hello World"
+								}
+						}
+				});
+		</script>
+</body>
+</html>

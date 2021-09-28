@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+		<div id="app">
+				SYNC: 
+				<my-component></my-component>
+				<my-component></my-component>
+				<my-component></my-component>
+
+				ASYNC:
+				<my-component2></my-component2>
+				<my-component2></my-component2>
+				<my-component2></my-component2>
+		</div>
+		<script>
+				const counter = {counter: 0}
+				const Component = {
+						template: '<div><button v-on:click="counter+=1">{{counter}}</button></div>',
+						data() {
+								return counter
+						}
+				};
+				const Component2 = {
+						template: '<div><button v-on:click="counter+=1">{{counter}}</button></div>',
+						data() {
+								return {
+								 	counter: 0
+								}
+						}
+				};
+
+				new Vue ({
+						el: "#app",
+						components: {'myComponent': Component, 'my-component2': Component2},
+						data() {
+								return {
+										message: ''
+								}
+						}
+				});
+		</script>
+</body>
+</html>
