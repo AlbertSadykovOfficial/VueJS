@@ -1,0 +1,61 @@
+<!-- Слоты с ограниченной обастью видимости
+			
+			Слоты с ограниченной областью видимости похож на именованные, 
+			но играют роль шаблонов для многократного использования
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+		<div id="app">
+				<button @click="cycle">Следующий</button>
+				<h1>
+					<component :is="currentView"></component>
+				</h1>
+		</div>
+		<script>
+				// Передача литералов через входные параметры 
+				const BookComponent = {
+						template: `<div>
+													Компонент книг
+											</div>`
+				};
+				const FormComponent = {
+						template: `<div>
+													Компонент формы
+											</div>`
+				};
+				const HeaderComponent = {
+						template: `<div>
+													Компонент Заголовка
+											</div>`
+				};
+				
+				new Vue ({
+						el: "#app",
+						components: {
+														'book-component': BookComponent, 
+														'form-component': FormComponent,
+														'header-component': HeaderComponent
+												},
+
+						data() {
+									return {
+										currentView: HeaderComponent
+								}
+						},
+						methods: {
+								cycle() {
+										if (this.currentView == HeaderComponent)
+												this.currentView = BookComponent
+										else
+											this.currentView = this.currentView === BookComponent ?
+											FormComponent : HeaderComponent
+								}
+						}
+				});
+		</script>
+</body>
+</html>

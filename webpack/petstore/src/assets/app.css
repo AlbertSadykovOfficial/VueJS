@@ -7,6 +7,9 @@ body {
   */
   overflow-x: hidden;
 }
+#app {
+  margin-top: 0px !important;
+}
 .cart {
   padding: 20px 50px;
 }

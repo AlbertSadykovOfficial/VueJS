@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+		<div id="app">
+				<form-component	:author="authorLabel" :title="titleLabel">
+					<h1>{{ header }}</h1>
+				</form-component>
+		</div>
+		<script>
+				// Передача литералов через входные параметры 
+				const Component = {
+						template: `<div>
+												<form>
+													<slot></slot>
+													<label for="title">{{ title }}</label>
+														<input id="title" type="text" /><br />
+													<label for="author">{{ author }}</label>
+														<input id="author" type="text" /><br />
+													<button>Submit</button>
+												</form>
+											</div>`,
+						props: ['title', 'author']
+				};
+
+				new Vue ({
+						el: "#app",
+						components: {'form-component': Component},
+
+						data() {
+								return {
+										header: "Book Author From",
+										titleLabel: "The Title",
+										authorLabel: "The Author"
+								}
+						}
+				});
+		</script>
+</body>
+</html>

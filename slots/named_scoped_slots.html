@@ -1,0 +1,52 @@
+<!-- Слоты с ограниченной обастью видимости
+			
+			Слоты с ограниченной областью видимости похож на именованные, 
+			но играют роль шаблонов для многократного использования
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+		<div id="app">
+				<book-component :books="books">
+						<h1 slot="header">{{ header }}</h1>
+						<template slot="book" slot-scope="props"> <!-- Внимание на атрибут slot-scope -->
+								<h2>
+										<i>{{ props.text.title }}</i>
+										<small>by: {{ props.text.author }}</small>
+								</h2>
+						</template>
+				</book-component>
+		</div>
+		<script>
+				// Передача литералов через входные параметры 
+				const Component = {
+						template: `<div>
+													<slot name="header"></slot>
+													<slot name="book" v-for="book in books" :text="book">
+
+													</slot>
+											</div>`,
+						props: ['books']
+				};
+
+				new Vue ({
+						el: "#app",
+						components: {'book-component': Component},
+
+						data() {
+									return {
+										header: "Список книг",
+										books: [
+															{author: "Джон Смит", title: "Лучшие времена"},
+															{author: "Джейн До", title: "Иди на запад, молодой человек"},
+															{author: "Айвери Катз", title: "Жизнь и время Айвери"}
+														]
+								}
+						}
+				});
+		</script>
+</body>
+</html>

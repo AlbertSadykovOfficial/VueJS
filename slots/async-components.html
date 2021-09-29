@@ -1,0 +1,34 @@
+<!--
+		Асинхронные компоненты
+
+		Если приложение большое, потребуется подгруать некоторые компоненты асинхронно
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+		<div id="app">
+				<book-component></book-component>
+		</div>
+		<script>
+				// Передача литералов через входные параметры 
+				const BookComponent = function (resolve, reject) {
+						setTimeout(
+								function () {
+										resolve({
+												template: `<div>
+																			Асинхронный компонент
+																	</div>`
+									});
+								}, 1000);
+					};
+				
+				new Vue ({
+						el: "#app",
+						components: { 'book-component': BookComponent }
+				});
+		</script>
+</body>
+</html>
