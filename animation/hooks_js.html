@@ -1,0 +1,103 @@
+<!--
+    JS-ХУКИ
+
+    Применяются для создания сложых, программируемых анимаций
+    Если пишм свою анимацию, тоо завершении анимации всегда
+    должен вызываться done() 
+-->
+<!DOCTYPE html>
+    <script src="https://unpkg.com/vue"></script>
+<html>
+<head>
+  <style>
+  @keyframes bounceIn {
+   0% {
+     transform: scale(0.1);
+     opacity: 0;
+   }
+   60% {
+     transform: scale(1.2);
+     opacity: 1;
+   }
+   100% {
+     transform: scale(1);
+   }
+  }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1 @click="show = !show">{{title}}</h1>
+    <transition name="fade"
+            @enter="enter"
+            @leave="leave"
+            @after-enter="afterEnter"
+            @enter-cancelled="enterCancelled"
+            @before-leave="beforeLeave"
+            @leave="leave"
+            @after-leave="afterLeave"
+            @leave-cancelled="leaveCancelled"
+            v-bind:css="false">
+      <div v-if="show">
+        <h1>{{ description }}</h1>
+      </div>
+    </transition>
+  </div>
+<script>
+  // По авершении анимации всегда должен вызываться done()
+  function addEventListener(el, done) {
+    el.addEventListener("animationend", function() {
+      el.style="";
+      done();
+    });
+  };
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+          title: 'Война и Мир',
+          description: 'Что-то там было, что-то не было, много страниц',
+          show: false
+      }
+    },
+    methods: {
+      enter(el, done) { // Момент анимации
+        console.log("enter");
+        addEventListener(el,done);
+        el.style.animationName = "bounceIn"
+        el.style.animationDuration = "1.5s";
+
+      },
+      leave(el, done) { // Момент анимации
+        console.log("leave"); 
+        addEventListener(el,done);
+        el.style.animationName = "bounceIn";
+        el.style.animationDuration = "1.5s";
+        el.style.animationDirection = "reverse"; // Инверсия анимация 
+
+      },
+      beforeEnter(el) {
+          console.log("before enter"); // За момент до наала анимации
+      },
+      afterEnter(el) {
+          console.log("after enter"); // По завершении анимации
+      },
+      enterCancelled(el) {
+          console.log("enter cancelled");
+      },
+      beforeLeave(el) {
+          console.log("before leave"); 
+      },
+      afterLeave(el) {
+          console.log("after leave");
+      },
+      leaveCancelled(el) {
+          console.log("leave cancelled");
+      }
+
+    }
+
+  });
+</script>
+</body>
+</html>

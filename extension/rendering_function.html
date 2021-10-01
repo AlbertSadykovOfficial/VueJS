@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Все, что между тегами доступно в виде слота -->
+        <my-comp header="1">Друг</my-comp>
+    </div>
+
+<script>
+/*
+    Функция отрисовки
+
+    Если нехватает шаблонов во Vue,
+    то можно писать свои функции отрисовки
+*/
+  Vue.component('my-comp',{
+    render(createElement) {
+        return createElement('h'+this.header,
+        {'class':'text-center',
+          on: {
+            click(e){
+              alert('Нажатие');
+            }
+          }
+        },
+        // Достаем данные из слота
+        this.welcome + this.$slots.default[0].text  )
+    },
+  data() {
+    return {
+      welcome: 'Првиет '
+    }
+  },
+    props: ['header']
+  });
+  new Vue({el: '#app'})
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+		<div id="app">
+				<div @click="show = !show">
+					<h2>{{ title }}</h2>
+				</div>
+				<!-- 
+							Через name мы модем строить классы, 
+							которые будут добавляться в определенный момент времени
+							name-enter, name-leave -> fade-leave
+
+									v-enter - Добавляется перед соданием элемента и удаляется через 1 кадр
+									v-leave-to - через 1 кадр после перехода
+									...
+
+						-->
+				<transition name="bounce">
+						<div v-if="show">
+								<h1>{{ description }}</h1>
+						</div>
+				</transition>
+		</div>
+		<script>
+				new Vue ({
+						el: "#app",
+						data() {
+								return {
+										title: 'Война и Мир',
+										description: 'Что-то там было, что-то не было, много страниц',
+										show: false
+								}
+						}
+				});
+		</script>
+
+		<style>
+				.fade-enter-active, .fade-leave-active {
+						transition: opacity 2.5s ease-out;
+				}
+
+				.fade-enter, .fade-leave-to {
+						opacity: 0;
+				}
+		</style>
+
+	  <style>
+			  .bounce-enter-active {
+			  		animation: bounceIn 2s;
+			  }
+			  .bounce-leave-active {
+			  		animation: bounceIn 2s reverse;
+			  }
+
+			  @keyframes bounceIn {
+				  0% {
+					    transform: scale(0.1);
+					    opacity: 0;
+				  }
+				  60% {
+					    transform: scale(1.2);
+					    opacity: 1;
+				  }
+				  100% {
+				   		transform: scale(1);
+				  }
+			}
+  </style>
+</body>
+</html>
