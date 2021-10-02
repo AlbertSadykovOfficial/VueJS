@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+	<script src="https://unpkg.com/vuex"></script>
+</head>
+<body>
+		<div id="app">
+				<h1>{{header}}</h1>
+				<h2>{{welcome}}</h2>
+				<h3>{{counter}}</h3>
+				<button @click="increment">Нажми</button>
+		</div>
+</body>
+<script>
+/*
+		Vuex управляет состоянием.
+
+		Состояние - данные, которые поддерживают прложение
+		Задача Vuex хранить информацию централизованно.
+		
+		Его стоит применять для более сложных пиложений, 
+		т.к для простых н избыочен.
+
+		Vuex хранит информацию в едином объекте - едином источнике истиности.
+
+		Проблемы, которые могут возникнуть при исп. Vuex:
+
+				( Характерно для разбиения на модули )
+
+				Так как хранилище обещее, то по мере роста проекта может случится такое,
+				что имена (геттеров, дййствий, мутаций и свойств) могут переекаться.
+
+				Для того, чтобы этого не произошло, то слеует использовать пространства имен,
+				чтобы вклчить их, нужно указать namespace: true в вверху Vuex.store.
+*/	
+		const store = new Vuex.Store({
+				state: {
+						msg: 'Hello World',
+						count: 0
+				},
+				// Мутация инкрементации состояния
+				mutations: {
+					increment(state, payload) {
+							state.count += payload;
+					}
+				}
+		})
+
+		new Vue({
+				el: '#app',
+				data() {
+						return {
+								header: 'Vuex App'
+						}
+				},
+				computed: {
+						welcome() {
+								return store.state.msg
+						},
+						counter() {
+							return store.state.count
+						}
+				},
+				// Выполнить мутацию
+				methods: {
+						increment() {
+								store.commit('increment', 10)
+						}
+				}
+		})
+</script>
+</html>

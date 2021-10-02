@@ -3,9 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
 // Импортируем стили 
 require('./assets/app.css')
+import { store } from './store/store'; // Хранилище Vuex (npm install vuex)
 
 Vue.config.productionTip = false
 
@@ -13,6 +13,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store, // Добавляем хранилище Vuex в экземпляр Vue.js
   components: { App },
   template: '<App/>'
 })

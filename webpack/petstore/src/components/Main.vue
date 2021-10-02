@@ -2,7 +2,7 @@
   <div>
   <my-header :cartItemCount="cartItemCount"></my-header>
   <main>
-    <div v-for="product in sortedProducts">
+    <div v-for="product in products"> <!-- sortedProducts -->
       <div class="row">
         <div class="col-md-5 col-md-offset-0">
           <figure>
@@ -70,12 +70,20 @@
 
 
 <script>
+
 import MyHeader from './Header.vue';
+// Делаем так, чтобы все геттеры были добавлены в виде вычисляемых свойств.
+// (смотри computed) 
+import {mapGetters} from 'vuex';
+//import {mapState} from 'vuex'; - Добавляется в computed по аналогии с mapGetters 
+//import {mapMutations} from 'vuex'; - Добавляется в methods по аналогии с mapGetters
+//import {mapActions} from 'vuex'; - Добавляется в methods по аналогии с mapGetters
+
 export default {
   name: 'imain',
   data() {
     return {
-      products: {},
+      // products: {}, - Если используем Vuex, то эта переменная не нужна
       cart: []
     };
   },
@@ -106,9 +114,21 @@ export default {
     }
   },
   computed: {
+    products() {
+        // Возвращаем геттер
+        return this.$store.getters.products;
+    },
+
+    // Пока гприменимость не так очевидна,
+    // но если будет много геттеров, то он будет удобен
+    ...mapGetters([
+        'products'
+    ]),
+
     cartItemCount() {
       return this.cart.length || '';
     },
+    
     sortedProducts() {
       if (this.products.length > 0) {
         let productsArray = this.products.slice(0);
@@ -144,10 +164,14 @@ export default {
   },
   // В каталоге ststic хранится файл json со всем товарами
   created: function() {
+    this.$store.dispatch('initStore');
+    /* 
+    // этот код для использовния на локальных хранилищах, без Vuex
     axios.get('/static/products.json').then(response => {
       this.products = response.data.products;
       console.log(this.products);
     });
+    */
   }
 };
 </script>
